@@ -1,24 +1,26 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const mongoURL = "mongodb://localhost:27017/jobs"
+const mongoURL = process.env.MONGO_URI;
 
-mongoose.connect(mongoURL, {
-   
-});
+mongoose.connect(mongoURL)
+  .then(() => console.log('Connected to MongoDB server'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 const db = mongoose.connection;
 
 db.on('connected', () => {
-    console.log('Connected to MongoDB server');
+  console.log('Mongoose connected to MongoDB');
 });
 
 db.on('error', (err) => {
-    console.error('MongoDB connection error:', err);
+  console.error('Mongoose connection error:', err);
 });
 
 db.on('disconnected', () => {
-    console.log('MongoDB disconnected');
+  console.log('Mongoose disconnected from MongoDB');
 });
+mongoose.set("debug", true);
+
 
 module.exports = db;
